@@ -13,6 +13,7 @@
 		5F7CBCC525A0C564002F4F30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F7CBCC325A0C564002F4F30 /* Main.storyboard */; };
 		5F7CBCC725A0C567002F4F30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F7CBCC625A0C567002F4F30 /* Assets.xcassets */; };
 		5F7CBCCA25A0C567002F4F30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F7CBCC825A0C567002F4F30 /* LaunchScreen.storyboard */; };
+		5F7D5DE925DC3C9800410E84 /* FlowerClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D5DE825DC3C9800410E84 /* FlowerClassifier.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		5F7CBCC625A0C567002F4F30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5F7CBCC925A0C567002F4F30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F7CBCCB25A0C567002F4F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5F7D5DE825DC3C9800410E84 /* FlowerClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = FlowerClassifier.mlmodel; path = "Flower Classification/FlowerClassifier.mlmodel"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				5F7CBCC625A0C567002F4F30 /* Assets.xcassets */,
 				5F7CBCC825A0C567002F4F30 /* LaunchScreen.storyboard */,
 				5F7CBCCB25A0C567002F4F30 /* Info.plist */,
+				5F7D5DE825DC3C9800410E84 /* FlowerClassifier.mlmodel */,
 			);
 			path = "what-flower";
 			sourceTree = "<group>";
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F7D5DE925DC3C9800410E84 /* FlowerClassifier.mlmodel in Sources */,
 				5F7CBCC225A0C564002F4F30 /* ViewController.swift in Sources */,
 				5F7CBCBE25A0C564002F4F30 /* AppDelegate.swift in Sources */,
 				5F7CBCC025A0C564002F4F30 /* SceneDelegate.swift in Sources */,
