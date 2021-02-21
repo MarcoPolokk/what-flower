@@ -8,9 +8,12 @@
 import UIKit
 import CoreML
 import Vision
+import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    let wikipediaURL = "https://en.wikipedia.org/w/api.php"
     let imagePicker = UIImagePickerController()
     
     @IBOutlet weak var imageView: UIImageView!
@@ -41,26 +44,55 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func detect(image: CIImage) {
-    
+        
         guard let model = try? VNCoreMLModel(for: FlowerClassifier().model) else {
             
             fatalError("Cannot import model.")
         }
         
         let request = VNCoreMLRequest(model: model) { (request, error) in
-            let classification = request.results?.first as? VNClassificationObservation
+            guard let classification = request.results?.first as? VNClassificationObservation else {
+                fatalError("Could not classify image")
+            }
             
-            self.navigationItem.title = classification?.identifier.capitalized
+            self.navigationItem.title = classification.identifier.capitalized
+            self.requestInfo(flowerName: classification.identifier)
         }
         
         let handler = VNImageRequestHandler(ciImage: image)
         
         do {
-        try handler.perform([request])
+            try handler.perform([request])
             
         } catch {
             print(error)
         }
+    }
+    
+    func requestInfo(flowerName: String) {
+        
+        let parameters : [String:String] = [
+            
+            "format" : "json",
+            "action" : "query",
+            "prop" : "extracts",
+            "exintro" : "",
+            "explaintext" : "",
+            "titles" : flowerName,
+            "indexpageids" : "",
+            "redirects" : "1",
+            
+        ]
+        
+        AF.request(wikipediaURL, method: .get, parameters: parameters).responseJSON { (response) in
+            switch response.result {
+            case .success( _):
+                print("Got the wikipedia info.")
+            case .failure( _):
+                print("Error getting the wikipedia info.")
+            }
+        }
+    
     }
     
     
