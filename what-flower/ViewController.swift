@@ -17,18 +17,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let imagePicker = UIImagePickerController()
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var label: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         imagePicker.delegate = self
-        imagePicker.allowsEditing = true
+        imagePicker.allowsEditing = false
         imagePicker.sourceType = .camera
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        if let userPickedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+        if let userPickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             
             guard let convertedCIImage = CIImage(image: userPickedImage) else {
                 
@@ -81,16 +82,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             "titles" : flowerName,
             "indexpageids" : "",
             "redirects" : "1",
-            
         ]
         
         AF.request(wikipediaURL, method: .get, parameters: parameters).responseJSON { (response) in
+            
             switch response.result {
             case .success( _):
                 print("Got the wikipedia info.")
+                let flowerJSON : JSON = JSON(response.result)
+                let flowerDescription = flowerJSON["query"]["pages"][0]["extract"].stringValue
+                let flowerTitle = flowerJSON["query"]["pages"][0]["title"].stringValue
+                print(response)
+                print(flowerDescription)
+                self.label.text = flowerDescription
+                self.navigationController?.title = flowerTitle
             case .failure( _):
                 print("Error getting the wikipedia info.")
             }
+//            format=json&action=query&prop=extracts&exintro=&explaintext=&titles=barberton%20daisy
         }
     
     }
