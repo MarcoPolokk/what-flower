@@ -10,6 +10,7 @@ import CoreML
 import Vision
 import Alamofire
 import SwiftyJSON
+import SDWebImage
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -37,8 +38,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
             
             detect(image: convertedCIImage)
-            
-            imageView.image = userPickedImage
         }
         
         imagePicker.dismiss(animated: true, completion: nil)
@@ -76,32 +75,40 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             "format" : "json",
             "action" : "query",
-            "prop" : "extracts",
+            "prop" : "extracts|pageimages",
             "exintro" : "",
             "explaintext" : "",
             "titles" : flowerName,
             "indexpageids" : "",
             "redirects" : "1",
+            "pithumbsize" : "500"
         ]
         
-        AF.request(wikipediaURL, method: .get, parameters: parameters).responseJSON { (response) in
+        AF.request(wikipediaURL, method: .get, parameters: parameters).response { (response) in
             
             switch response.result {
             case .success( _):
                 print("Got the wikipedia info.")
-                let flowerJSON : JSON = JSON(response.result)
-                let flowerDescription = flowerJSON["query"]["pages"][0]["extract"].stringValue
-                let flowerTitle = flowerJSON["query"]["pages"][0]["title"].stringValue
-                print(response)
-                print(flowerDescription)
-                self.label.text = flowerDescription
-                self.navigationController?.title = flowerTitle
+                do {
+                    let flowerJSON : JSON = try JSON(data: response.result.get()!)
+                    let pageid = flowerJSON["query"]["pageids"][0].stringValue
+                    let flowerDescription = flowerJSON["query"]["pages"][pageid]["extract"].stringValue
+                    let flowerImageURL = flowerJSON["query"]["pages"][pageid]["thumbnail"]["source"].stringValue
+                    
+                    self.label.text! = flowerDescription
+                    self.imageView.sd_setImage(with: URL(string: flowerImageURL))
+                    self.imageView.layer.masksToBounds = true
+                    self.imageView.layer.borderWidth = 2
+                    self.imageView.layer.cornerRadius = self.imageView.bounds.width / 2
+                    
+                } catch {
+                    print(error)
+                }
+            
             case .failure( _):
                 print("Error getting the wikipedia info.")
             }
-//            format=json&action=query&prop=extracts&exintro=&explaintext=&titles=barberton%20daisy
         }
-    
     }
     
     

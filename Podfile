@@ -7,6 +7,7 @@ target 'what-flower' do
 
   # Pods for what-flower
 	pod 'Alamofire', '~> 5.2'
-	pod 'SwiftyJSON', '~> 5.0'
+	pod 'SwiftyJSON'
+	pod 'SDWebImage'
 
 end
